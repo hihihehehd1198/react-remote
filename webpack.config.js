@@ -24,21 +24,27 @@ module.exports = {
   plugins: [
     new ModuleFederationPlugin({
       name: "reactRemote",
-      filename:'remoteEntry.js',
-      shared:{
+      filename: "remoteEntry.js",
+      shared: {
         ...dependencies,
-        react: {
-            // react
-            singleton: true,
-            requiredVersion: dependencies["react"],
-            eager:true,
-          },
-          "react-dom": {
-            // react-dom
-            eager:true,
-            singleton: true,
-            requiredVersion: dependencies["react-dom"],
-          },
+        "react": {
+          // react
+          singleton: true,
+          requiredVersion: dependencies["react"],
+          eager: true,
+        },
+        "react-dom": {
+          // react-dom
+          eager: true,
+          singleton: true,
+          requiredVersion: dependencies["react-dom"],
+        },
+        "react-router-dom": {
+          // react-dom
+          eager: true,
+          singleton: true,
+          requiredVersion: dependencies["react-router-dom"],
+        },
       },
       exposes: {
         "./App": "./src/App.tsx",
@@ -51,6 +57,7 @@ module.exports = {
   devServer: {
     port: 4203,
     liveReload: true,
-    watchFiles: [path.resolve(__dirname, '..')], // make sure that hits your host app folder
+    historyApiFallback: true,
+    watchFiles: [path.resolve(__dirname, "/react-remote")], // make sure that hits your host app folder
   },
 };
