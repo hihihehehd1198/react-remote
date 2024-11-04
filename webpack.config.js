@@ -1,7 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
-const dependencies = require("./package.json").dependencies;
+const { dependencies } = require("./package.json");
 module.exports = {
   mode: "development",
   entry: "./src/App.tsx",
@@ -10,24 +10,31 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".tsx", ".ts", ".js", '.scss', '.glb', '.html', '.css'],
   },
   module: {
+
     rules: [
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.(scss|ts|tsx)$/,
         exclude: path.resolve(__dirname, "node_modules"),
         use: "babel-loader",
+      },
+      {
+        test: /\.css$/i,
+        include: path.resolve(__dirname, 'src'),
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
     ],
   },
   plugins: [
+
     new ModuleFederationPlugin({
       name: "reactRemote",
       filename: "remoteEntry.js",
       shared: {
         ...dependencies,
-        "react": {
+        react: {
           // react
           singleton: true,
           requiredVersion: dependencies["react"],
@@ -45,9 +52,34 @@ module.exports = {
           singleton: true,
           requiredVersion: dependencies["react-router-dom"],
         },
+        "styled-components": {
+          // react-dom
+          singleton: true,
+          eager: true
+        },
+        "@react-three/drei": {
+          // react-dom
+          eager: true,
+          singleton: true,
+          requiredVersion: dependencies["@react-three/drei"],
+        },
+        "three": {
+          // react-dom
+          eager: true,
+          singleton: true,
+          requiredVersion: dependencies["three"],
+        },
+        "@react-three/fiber": {
+          // react-dom
+          eager: true,
+          singleton: true,
+          requiredVersion: dependencies["@react-three/fiber"],
+        },
+
       },
       exposes: {
         "./App": "./src/App.tsx",
+
       },
     }),
     new HtmlWebpackPlugin({
