@@ -17,11 +17,7 @@ customElements.define(
         <React.StrictMode>
           <BrowserRouter>
             <Routes>
-              <Route
-                path="/"
-                element={<Navigate replace to={"/react-remote"} />}
-              ></Route>
-              <Route path="/react-remote" element={<SceneComponent />} />
+              <Route path="/" element={<SceneComponent />} />
             </Routes>
           </BrowserRouter>
         </React.StrictMode>
