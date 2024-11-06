@@ -1,37 +1,34 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { Entity } from "./pages/entity";
-import { Page1 as ChildrenPage1 } from "./pages/entity/children/page1";
-import { Page2 } from "./pages/entity/children/page2";
-import { Page3 } from "./pages/entity/children/page3";
 import { SceneComponent } from "./pages/components/scene";
 import "./style.css";
-class App extends React.Component {
-  render() {
-    return (
-      <React.StrictMode>
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              // element={<Navigate replace to={"/entity"} />}
-              element={<Navigate replace to={"/scene"} />}
-            ></Route>
 
-            {/* <Route path="/react-remote" element={<Entity />}></Route> */}
-            <Route path="/scene" element={<SceneComponent />} />
-          </Routes>
-        </BrowserRouter>
-      </React.StrictMode>
-    );
+customElements.define(
+  "react-element",
+  class extends HTMLElement {
+    private readonly root: ReactDOM.Root;
+    constructor() {
+      super();
+      this.root = ReactDOM.createRoot(this);
+    }
+    connectedCallback() {
+      this.root.render(
+        <React.StrictMode>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/"
+                element={<Navigate replace to={"/react-remote"} />}
+              ></Route>
+              <Route path="/react-remote" element={<SceneComponent />} />
+            </Routes>
+          </BrowserRouter>
+        </React.StrictMode>
+      );
+    }
+    disconnectedCallback() {
+      this.root.unmount();
+    }
   }
-}
-
-class AppElement extends HTMLElement {
-  connectedCallback() {
-    ReactDOM.render(<App />, this);
-  }
-}
-
-customElements.define("react-element", AppElement);
+);

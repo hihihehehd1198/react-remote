@@ -7,8 +7,8 @@ export const Loading = () => {
     <Html>
       <p
         style={{
-          fontSize: 14,
-          color: "#f1f1f1",
+          fontSize: 16,
+          color: "white",
           fontWeight: 800,
           marginTop: 40,
         }}
